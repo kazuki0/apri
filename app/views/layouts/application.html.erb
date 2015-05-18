@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html ja="ja">
+<head>
+  <meta charset="utf-8" />
+  <title>Blog</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body class='<%= controller.controller_name %>'>
+<% flash.each do |key, value| %>
+  <%= content_tag(:div, value, class: "#{key}") %>
+<% end %>
+  
+<div id="wrap">
+
+  <header id="header">
+     <nav>
+    <!-- user_signed_in? はユーザがログインしているか調べるdeviseのHelperメソッド -->
+    <% if user_signed_in? %> 
+      <!-- current_user は現在ログインしているUserオブジェクトを返すdeviseのHelperメソッド -->
+      <!-- *_path はUserモデルを作成したときに、
+        deviseにより自動で作成されてますので、rake routesで確認できます -->
+      Logged in as <strong><%= current_user.email %></strong>.
+      <%= link_to 'プロフィール変更', edit_user_registration_path %> |
+      <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
+    <% else %>
+      <%= link_to "サインイン", new_user_registration_path %> |
+      <%= link_to "ログイン", new_user_session_path %> |
+      <%= link_to "Sign in with Twitter", user_omniauth_authorize_path(:twitter) %>
+    <% end %>
+  </nav>
+
+    <div class="inner">
+      <h1 id="logo"><%= link_to "Sample My Blog", root_path %></h1>
+      
+      <p id="catchcopy">Description or something ....</p>
+    </div><!-- /.inner -->
+  </header><!-- /#header -->
+
+  <div id="main">
+
+
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+
+    <%= yield %>
+  </div><!-- /#main -->
+  
+</div><!-- /#wrap -->
+</body>
+</html>
